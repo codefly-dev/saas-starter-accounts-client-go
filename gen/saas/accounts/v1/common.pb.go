@@ -7,13 +7,14 @@
 package accountsv1
 
 import (
-	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/buf/validate"
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 )
 
 const (
@@ -646,12 +647,16 @@ func (x *UserIdentity) GetEmailVerified() bool {
 }
 
 type Organization struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Slug          string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
-	OwnerId       string                 `protobuf:"bytes,4,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name      string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Slug      string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
+	OwnerId   string                 `protobuf:"bytes,4,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// Set when the organization was deleted. An archived organization is never
+	// listed to its former members and admits no request; only the platform
+	// view shows it.
+	ArchivedAt    *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=archived_at,json=archivedAt,proto3" json:"archived_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -721,12 +726,21 @@ func (x *Organization) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *Organization) GetArchivedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ArchivedAt
+	}
+	return nil
+}
+
 type OrgMembership struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrgId         string                 `protobuf:"bytes,1,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Role          OrgRole                `protobuf:"varint,3,opt,name=role,proto3,enum=saas.accounts.v1.OrgRole" json:"role,omitempty"`
-	JoinedAt      *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	OrgId    string                 `protobuf:"bytes,1,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
+	UserId   string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Role     OrgRole                `protobuf:"varint,3,opt,name=role,proto3,enum=saas.accounts.v1.OrgRole" json:"role,omitempty"`
+	JoinedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty"`
+	// Tenant-scoped directory label. Empty for deleted or unavailable accounts.
+	UserEmail     string `protobuf:"bytes,5,opt,name=user_email,json=userEmail,proto3" json:"user_email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -787,6 +801,13 @@ func (x *OrgMembership) GetJoinedAt() *timestamppb.Timestamp {
 		return x.JoinedAt
 	}
 	return nil
+}
+
+func (x *OrgMembership) GetUserEmail() string {
+	if x != nil {
+		return x.UserEmail
+	}
+	return ""
 }
 
 // Teams form a strict tree within an org: parent_team_id is the authoritative
@@ -898,11 +919,13 @@ func (x *Team) GetPath() string {
 }
 
 type TeamMembership struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TeamId        string                 `protobuf:"bytes,1,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Role          TeamRole               `protobuf:"varint,3,opt,name=role,proto3,enum=saas.accounts.v1.TeamRole" json:"role,omitempty"`
-	JoinedAt      *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	TeamId   string                 `protobuf:"bytes,1,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
+	UserId   string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Role     TeamRole               `protobuf:"varint,3,opt,name=role,proto3,enum=saas.accounts.v1.TeamRole" json:"role,omitempty"`
+	JoinedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty"`
+	// Tenant-scoped directory label. Empty for deleted or unavailable accounts.
+	UserEmail     string `protobuf:"bytes,5,opt,name=user_email,json=userEmail,proto3" json:"user_email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -965,6 +988,18 @@ func (x *TeamMembership) GetJoinedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *TeamMembership) GetUserEmail() string {
+	if x != nil {
+		return x.UserEmail
+	}
+	return ""
+}
+
+// Permission is one resource:action grant: a role's RBAC grant, or one scope
+// of an API key. The pair travels joined as `resource:action`, and a key's
+// scopes as one comma-separated header, so neither half may hold `:`, `,`,
+// whitespace or a control character — `users` / `read,*:*` would read back
+// as the root `*:*`. A lone `*` is the wildcard.
 type Permission struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Resource      string                 `protobuf:"bytes,1,opt,name=resource,proto3" json:"resource,omitempty"`
@@ -1391,19 +1426,23 @@ const file_saas_accounts_v1_common_proto_rawDesc = "" +
 	"\x0eemail_verified\x18\t \x01(\bR\remailVerified\x1a?\n" +
 	"\x11ProviderDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xe2\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x9f\x02\n" +
 	"\fOrganization\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x1b\n" +
 	"\x04name\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12;\n" +
 	"\x04slug\x18\x03 \x01(\tB'\xbaH$r\"\x10\x01\x18?2\x1c^[a-z0-9][a-z0-9-]*[a-z0-9]$R\x04slug\x12#\n" +
 	"\bowner_id\x18\x04 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\aownerId\x129\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xa7\x01\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12;\n" +
+	"\varchived_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"archivedAt\"\xc6\x01\n" +
 	"\rOrgMembership\x12\x15\n" +
 	"\x06org_id\x18\x01 \x01(\tR\x05orgId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12-\n" +
 	"\x04role\x18\x03 \x01(\x0e2\x19.saas.accounts.v1.OrgRoleR\x04role\x127\n" +
-	"\tjoined_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\bjoinedAt\"\x89\x02\n" +
+	"\tjoined_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\bjoinedAt\x12\x1d\n" +
+	"\n" +
+	"user_email\x18\x05 \x01(\tR\tuserEmail\"\x89\x02\n" +
 	"\x04Team\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x1f\n" +
 	"\x06org_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x05orgId\x12\x1b\n" +
@@ -1413,16 +1452,18 @@ const file_saas_accounts_v1_common_proto_rawDesc = "" +
 	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12$\n" +
 	"\x0eparent_team_id\x18\x06 \x01(\tR\fparentTeamId\x12\x12\n" +
 	"\x04slug\x18\a \x01(\tR\x04slug\x12\x12\n" +
-	"\x04path\x18\b \x01(\tR\x04path\"\xab\x01\n" +
+	"\x04path\x18\b \x01(\tR\x04path\"\xca\x01\n" +
 	"\x0eTeamMembership\x12\x17\n" +
 	"\ateam_id\x18\x01 \x01(\tR\x06teamId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12.\n" +
 	"\x04role\x18\x03 \x01(\x0e2\x1a.saas.accounts.v1.TeamRoleR\x04role\x127\n" +
-	"\tjoined_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\bjoinedAt\"R\n" +
+	"\tjoined_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\bjoinedAt\x12\x1d\n" +
 	"\n" +
-	"Permission\x12#\n" +
-	"\bresource\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\bresource\x12\x1f\n" +
-	"\x06action\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06action\"\xd1\x01\n" +
+	"user_email\x18\x05 \x01(\tR\tuserEmail\"\x98\x01\n" +
+	"\n" +
+	"Permission\x12F\n" +
+	"\bresource\x18\x01 \x01(\tB*\xbaH'r%\x10\x012!^(\\*|[A-Za-z0-9][A-Za-z0-9._-]*)$R\bresource\x12B\n" +
+	"\x06action\x18\x02 \x01(\tB*\xbaH'r%\x10\x012!^(\\*|[A-Za-z0-9][A-Za-z0-9._-]*)$R\x06action\"\xd1\x01\n" +
 	"\x04Role\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x1b\n" +
 	"\x04name\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12 \n" +
@@ -1540,23 +1581,24 @@ var file_saas_accounts_v1_common_proto_depIdxs = []int32{
 	20, // 6: saas.accounts.v1.UserIdentity.last_used:type_name -> google.protobuf.Timestamp
 	19, // 7: saas.accounts.v1.UserIdentity.provider_data:type_name -> saas.accounts.v1.UserIdentity.ProviderDataEntry
 	20, // 8: saas.accounts.v1.Organization.created_at:type_name -> google.protobuf.Timestamp
-	1,  // 9: saas.accounts.v1.OrgMembership.role:type_name -> saas.accounts.v1.OrgRole
-	20, // 10: saas.accounts.v1.OrgMembership.joined_at:type_name -> google.protobuf.Timestamp
-	20, // 11: saas.accounts.v1.Team.created_at:type_name -> google.protobuf.Timestamp
-	2,  // 12: saas.accounts.v1.TeamMembership.role:type_name -> saas.accounts.v1.TeamRole
-	20, // 13: saas.accounts.v1.TeamMembership.joined_at:type_name -> google.protobuf.Timestamp
-	14, // 14: saas.accounts.v1.Role.permissions:type_name -> saas.accounts.v1.Permission
-	3,  // 15: saas.accounts.v1.RoleAssignment.subject_kind:type_name -> saas.accounts.v1.SubjectKind
-	20, // 16: saas.accounts.v1.RoleAssignment.assigned_at:type_name -> google.protobuf.Timestamp
-	4,  // 17: saas.accounts.v1.Principal.kind:type_name -> saas.accounts.v1.PrincipalKind
-	20, // 18: saas.accounts.v1.Principal.created_at:type_name -> google.protobuf.Timestamp
-	20, // 19: saas.accounts.v1.Principal.revoked_at:type_name -> google.protobuf.Timestamp
-	20, // 20: saas.accounts.v1.Principal.disabled_at:type_name -> google.protobuf.Timestamp
-	21, // [21:21] is the sub-list for method output_type
-	21, // [21:21] is the sub-list for method input_type
-	21, // [21:21] is the sub-list for extension type_name
-	21, // [21:21] is the sub-list for extension extendee
-	0,  // [0:21] is the sub-list for field type_name
+	20, // 9: saas.accounts.v1.Organization.archived_at:type_name -> google.protobuf.Timestamp
+	1,  // 10: saas.accounts.v1.OrgMembership.role:type_name -> saas.accounts.v1.OrgRole
+	20, // 11: saas.accounts.v1.OrgMembership.joined_at:type_name -> google.protobuf.Timestamp
+	20, // 12: saas.accounts.v1.Team.created_at:type_name -> google.protobuf.Timestamp
+	2,  // 13: saas.accounts.v1.TeamMembership.role:type_name -> saas.accounts.v1.TeamRole
+	20, // 14: saas.accounts.v1.TeamMembership.joined_at:type_name -> google.protobuf.Timestamp
+	14, // 15: saas.accounts.v1.Role.permissions:type_name -> saas.accounts.v1.Permission
+	3,  // 16: saas.accounts.v1.RoleAssignment.subject_kind:type_name -> saas.accounts.v1.SubjectKind
+	20, // 17: saas.accounts.v1.RoleAssignment.assigned_at:type_name -> google.protobuf.Timestamp
+	4,  // 18: saas.accounts.v1.Principal.kind:type_name -> saas.accounts.v1.PrincipalKind
+	20, // 19: saas.accounts.v1.Principal.created_at:type_name -> google.protobuf.Timestamp
+	20, // 20: saas.accounts.v1.Principal.revoked_at:type_name -> google.protobuf.Timestamp
+	20, // 21: saas.accounts.v1.Principal.disabled_at:type_name -> google.protobuf.Timestamp
+	22, // [22:22] is the sub-list for method output_type
+	22, // [22:22] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_saas_accounts_v1_common_proto_init() }

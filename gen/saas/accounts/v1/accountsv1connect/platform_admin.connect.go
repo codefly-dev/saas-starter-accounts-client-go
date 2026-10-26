@@ -5,14 +5,16 @@
 package accountsv1connect
 
 import (
-	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	v1 "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/accounts/v1"
-	v11 "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/jobs/v1"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	http "net/http"
 	strings "strings"
+
+	connect "connectrpc.com/connect"
+	v1 "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/accounts/v1"
+	v12 "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/events/v1"
+	v11 "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/jobs/v1"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are
@@ -47,6 +49,9 @@ const (
 	// PlatformAdminServiceImpersonateUserProcedure is the fully-qualified name of the
 	// PlatformAdminService's ImpersonateUser RPC.
 	PlatformAdminServiceImpersonateUserProcedure = "/saas.accounts.v1.PlatformAdminService/ImpersonateUser"
+	// PlatformAdminServiceStopImpersonationProcedure is the fully-qualified name of the
+	// PlatformAdminService's StopImpersonation RPC.
+	PlatformAdminServiceStopImpersonationProcedure = "/saas.accounts.v1.PlatformAdminService/StopImpersonation"
 	// PlatformAdminServiceListActiveSessionsProcedure is the fully-qualified name of the
 	// PlatformAdminService's ListActiveSessions RPC.
 	PlatformAdminServiceListActiveSessionsProcedure = "/saas.accounts.v1.PlatformAdminService/ListActiveSessions"
@@ -68,6 +73,12 @@ const (
 	// PlatformAdminServiceListPlatformAdminsProcedure is the fully-qualified name of the
 	// PlatformAdminService's ListPlatformAdmins RPC.
 	PlatformAdminServiceListPlatformAdminsProcedure = "/saas.accounts.v1.PlatformAdminService/ListPlatformAdmins"
+	// PlatformAdminServiceListAllOrganizationsProcedure is the fully-qualified name of the
+	// PlatformAdminService's ListAllOrganizations RPC.
+	PlatformAdminServiceListAllOrganizationsProcedure = "/saas.accounts.v1.PlatformAdminService/ListAllOrganizations"
+	// PlatformAdminServiceGetOrganizationRosterProcedure is the fully-qualified name of the
+	// PlatformAdminService's GetOrganizationRoster RPC.
+	PlatformAdminServiceGetOrganizationRosterProcedure = "/saas.accounts.v1.PlatformAdminService/GetOrganizationRoster"
 	// PlatformAdminServiceListFeatureFlagsProcedure is the fully-qualified name of the
 	// PlatformAdminService's ListFeatureFlags RPC.
 	PlatformAdminServiceListFeatureFlagsProcedure = "/saas.accounts.v1.PlatformAdminService/ListFeatureFlags"
@@ -86,6 +97,21 @@ const (
 	// PlatformAdminServiceReplayJobProcedure is the fully-qualified name of the PlatformAdminService's
 	// ReplayJob RPC.
 	PlatformAdminServiceReplayJobProcedure = "/saas.accounts.v1.PlatformAdminService/ReplayJob"
+	// PlatformAdminServiceGetEventOperationsProcedure is the fully-qualified name of the
+	// PlatformAdminService's GetEventOperations RPC.
+	PlatformAdminServiceGetEventOperationsProcedure = "/saas.accounts.v1.PlatformAdminService/GetEventOperations"
+	// PlatformAdminServiceListEventSubscriptionsProcedure is the fully-qualified name of the
+	// PlatformAdminService's ListEventSubscriptions RPC.
+	PlatformAdminServiceListEventSubscriptionsProcedure = "/saas.accounts.v1.PlatformAdminService/ListEventSubscriptions"
+	// PlatformAdminServiceListPlatformCatalogueProcedure is the fully-qualified name of the
+	// PlatformAdminService's ListPlatformCatalogue RPC.
+	PlatformAdminServiceListPlatformCatalogueProcedure = "/saas.accounts.v1.PlatformAdminService/ListPlatformCatalogue"
+	// PlatformAdminServiceGetModuleEnvelopeProcedure is the fully-qualified name of the
+	// PlatformAdminService's GetModuleEnvelope RPC.
+	PlatformAdminServiceGetModuleEnvelopeProcedure = "/saas.accounts.v1.PlatformAdminService/GetModuleEnvelope"
+	// PlatformAdminServicePutModuleEnvelopeProcedure is the fully-qualified name of the
+	// PlatformAdminService's PutModuleEnvelope RPC.
+	PlatformAdminServicePutModuleEnvelopeProcedure = "/saas.accounts.v1.PlatformAdminService/PutModuleEnvelope"
 )
 
 // PlatformAdminServiceClient is a client for the saas.accounts.v1.PlatformAdminService service.
@@ -95,6 +121,15 @@ type PlatformAdminServiceClient interface {
 	SuspendUser(context.Context, *connect.Request[v1.SuspendUserRequest]) (*connect.Response[emptypb.Empty], error)
 	UnsuspendUser(context.Context, *connect.Request[v1.UnsuspendUserRequest]) (*connect.Response[emptypb.Empty], error)
 	ImpersonateUser(context.Context, *connect.Request[v1.ImpersonateUserRequest]) (*connect.Response[v1.ImpersonateUserResponse], error)
+	// StopImpersonation closes the caller's own impersonation window: it revokes
+	// the session's access tokens and records the end of the window.
+	//
+	// platform_role is deliberately NONE. Platform authority is withheld from an
+	// impersonated request by design, so a support-role gate would make this the
+	// one operation an impersonated session can never reach — and ending the
+	// session is precisely what it must be able to do. Being impersonated is
+	// itself the authorization, checked in the handler.
+	StopImpersonation(context.Context, *connect.Request[v1.StopImpersonationRequest]) (*connect.Response[v1.StopImpersonationResponse], error)
 	// Session visibility
 	ListActiveSessions(context.Context, *connect.Request[v1.ListActiveSessionsRequest]) (*connect.Response[v1.ListActiveSessionsResponse], error)
 	RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[emptypb.Empty], error)
@@ -105,6 +140,12 @@ type PlatformAdminServiceClient interface {
 	GrantPlatformRole(context.Context, *connect.Request[v1.GrantPlatformRoleRequest]) (*connect.Response[emptypb.Empty], error)
 	RevokePlatformRole(context.Context, *connect.Request[v1.RevokePlatformRoleRequest]) (*connect.Response[emptypb.Empty], error)
 	ListPlatformAdmins(context.Context, *connect.Request[v1.ListPlatformAdminsRequest]) (*connect.Response[v1.ListPlatformAdminsResponse], error)
+	// ListAllOrganizations lists every organization on the platform, whether or
+	// not the caller belongs to it.
+	ListAllOrganizations(context.Context, *connect.Request[v1.ListAllOrganizationsRequest]) (*connect.Response[v1.ListAllOrganizationsResponse], error)
+	// GetOrganizationRoster lists any organization's members for the platform
+	// view, which needs no membership of its own.
+	GetOrganizationRoster(context.Context, *connect.Request[v1.GetOrganizationRosterRequest]) (*connect.Response[v1.GetOrganizationRosterResponse], error)
 	// Legacy feature-flag migration inventory (platform-only, read-only)
 	ListFeatureFlags(context.Context, *connect.Request[v1.ListFeatureFlagsRequest]) (*connect.Response[v1.ListFeatureFlagsResponse], error)
 	// Deprecated: retained for v1 wire compatibility. The legacy inventory is
@@ -118,6 +159,22 @@ type PlatformAdminServiceClient interface {
 	ListJobs(context.Context, *connect.Request[v11.ListJobsRequest]) (*connect.Response[v11.ListJobsResponse], error)
 	GetJob(context.Context, *connect.Request[v11.GetJobRequest]) (*connect.Response[v11.GetJobResponse], error)
 	ReplayJob(context.Context, *connect.Request[v11.ReplayJobRequest]) (*connect.Response[v11.ReplayJobResponse], error)
+	// Domain-event platform operations (#494 P3). Payload bytes never leave the
+	// durable event boundary through these methods — only counts, timings, and
+	// control-plane subscription metadata do.
+	GetEventOperations(context.Context, *connect.Request[v12.GetEventOperationsRequest]) (*connect.Response[v12.GetEventOperationsResponse], error)
+	ListEventSubscriptions(context.Context, *connect.Request[v12.ListEventSubscriptionsRequest]) (*connect.Response[v12.ListEventSubscriptionsResponse], error)
+	// ListPlatformCatalogue lists every composed module and solution with what
+	// it declares, what runs, and which organizations have it installed.
+	ListPlatformCatalogue(context.Context, *connect.Request[v1.ListPlatformCatalogueRequest]) (*connect.Response[v1.ListPlatformCatalogueResponse], error)
+	// GetModuleEnvelope reads the current module envelope: the authority ceiling
+	// every module principal on this host is derived inside, beside what the
+	// applied module manifests ask for of it.
+	GetModuleEnvelope(context.Context, *connect.Request[v1.GetModuleEnvelopeRequest]) (*connect.Response[v1.GetModuleEnvelopeResponse], error)
+	// PutModuleEnvelope writes the next revision of the module envelope. It takes
+	// effect at the next check with no restart: the module registry is derived
+	// again from it, so a narrowing removes what the new ceiling no longer allows.
+	PutModuleEnvelope(context.Context, *connect.Request[v1.PutModuleEnvelopeRequest]) (*connect.Response[v1.PutModuleEnvelopeResponse], error)
 }
 
 // NewPlatformAdminServiceClient constructs a client for the saas.accounts.v1.PlatformAdminService
@@ -153,6 +210,12 @@ func NewPlatformAdminServiceClient(httpClient connect.HTTPClient, baseURL string
 			httpClient,
 			baseURL+PlatformAdminServiceImpersonateUserProcedure,
 			connect.WithSchema(platformAdminServiceMethods.ByName("ImpersonateUser")),
+			connect.WithClientOptions(opts...),
+		),
+		stopImpersonation: connect.NewClient[v1.StopImpersonationRequest, v1.StopImpersonationResponse](
+			httpClient,
+			baseURL+PlatformAdminServiceStopImpersonationProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("StopImpersonation")),
 			connect.WithClientOptions(opts...),
 		),
 		listActiveSessions: connect.NewClient[v1.ListActiveSessionsRequest, v1.ListActiveSessionsResponse](
@@ -197,6 +260,18 @@ func NewPlatformAdminServiceClient(httpClient connect.HTTPClient, baseURL string
 			connect.WithSchema(platformAdminServiceMethods.ByName("ListPlatformAdmins")),
 			connect.WithClientOptions(opts...),
 		),
+		listAllOrganizations: connect.NewClient[v1.ListAllOrganizationsRequest, v1.ListAllOrganizationsResponse](
+			httpClient,
+			baseURL+PlatformAdminServiceListAllOrganizationsProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("ListAllOrganizations")),
+			connect.WithClientOptions(opts...),
+		),
+		getOrganizationRoster: connect.NewClient[v1.GetOrganizationRosterRequest, v1.GetOrganizationRosterResponse](
+			httpClient,
+			baseURL+PlatformAdminServiceGetOrganizationRosterProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("GetOrganizationRoster")),
+			connect.WithClientOptions(opts...),
+		),
 		listFeatureFlags: connect.NewClient[v1.ListFeatureFlagsRequest, v1.ListFeatureFlagsResponse](
 			httpClient,
 			baseURL+PlatformAdminServiceListFeatureFlagsProcedure,
@@ -233,28 +308,66 @@ func NewPlatformAdminServiceClient(httpClient connect.HTTPClient, baseURL string
 			connect.WithSchema(platformAdminServiceMethods.ByName("ReplayJob")),
 			connect.WithClientOptions(opts...),
 		),
+		getEventOperations: connect.NewClient[v12.GetEventOperationsRequest, v12.GetEventOperationsResponse](
+			httpClient,
+			baseURL+PlatformAdminServiceGetEventOperationsProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("GetEventOperations")),
+			connect.WithClientOptions(opts...),
+		),
+		listEventSubscriptions: connect.NewClient[v12.ListEventSubscriptionsRequest, v12.ListEventSubscriptionsResponse](
+			httpClient,
+			baseURL+PlatformAdminServiceListEventSubscriptionsProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("ListEventSubscriptions")),
+			connect.WithClientOptions(opts...),
+		),
+		listPlatformCatalogue: connect.NewClient[v1.ListPlatformCatalogueRequest, v1.ListPlatformCatalogueResponse](
+			httpClient,
+			baseURL+PlatformAdminServiceListPlatformCatalogueProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("ListPlatformCatalogue")),
+			connect.WithClientOptions(opts...),
+		),
+		getModuleEnvelope: connect.NewClient[v1.GetModuleEnvelopeRequest, v1.GetModuleEnvelopeResponse](
+			httpClient,
+			baseURL+PlatformAdminServiceGetModuleEnvelopeProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("GetModuleEnvelope")),
+			connect.WithClientOptions(opts...),
+		),
+		putModuleEnvelope: connect.NewClient[v1.PutModuleEnvelopeRequest, v1.PutModuleEnvelopeResponse](
+			httpClient,
+			baseURL+PlatformAdminServicePutModuleEnvelopeProcedure,
+			connect.WithSchema(platformAdminServiceMethods.ByName("PutModuleEnvelope")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // platformAdminServiceClient implements PlatformAdminServiceClient.
 type platformAdminServiceClient struct {
-	searchUsers         *connect.Client[v1.SearchUsersRequest, v1.SearchUsersResponse]
-	suspendUser         *connect.Client[v1.SuspendUserRequest, emptypb.Empty]
-	unsuspendUser       *connect.Client[v1.UnsuspendUserRequest, emptypb.Empty]
-	impersonateUser     *connect.Client[v1.ImpersonateUserRequest, v1.ImpersonateUserResponse]
-	listActiveSessions  *connect.Client[v1.ListActiveSessionsRequest, v1.ListActiveSessionsResponse]
-	revokeSession       *connect.Client[v1.RevokeSessionRequest, emptypb.Empty]
-	getOrgEntitlements  *connect.Client[v1.GetOrgEntitlementsRequest, v1.GetOrgEntitlementsResponse]
-	overrideEntitlement *connect.Client[v1.OverrideEntitlementRequest, v1.OverrideEntitlementResponse]
-	grantPlatformRole   *connect.Client[v1.GrantPlatformRoleRequest, emptypb.Empty]
-	revokePlatformRole  *connect.Client[v1.RevokePlatformRoleRequest, emptypb.Empty]
-	listPlatformAdmins  *connect.Client[v1.ListPlatformAdminsRequest, v1.ListPlatformAdminsResponse]
-	listFeatureFlags    *connect.Client[v1.ListFeatureFlagsRequest, v1.ListFeatureFlagsResponse]
-	upsertFeatureFlag   *connect.Client[v1.UpsertFeatureFlagRequest, v1.UpsertFeatureFlagResponse]
-	getJobOperations    *connect.Client[v11.GetJobOperationsRequest, v11.GetJobOperationsResponse]
-	listJobs            *connect.Client[v11.ListJobsRequest, v11.ListJobsResponse]
-	getJob              *connect.Client[v11.GetJobRequest, v11.GetJobResponse]
-	replayJob           *connect.Client[v11.ReplayJobRequest, v11.ReplayJobResponse]
+	searchUsers            *connect.Client[v1.SearchUsersRequest, v1.SearchUsersResponse]
+	suspendUser            *connect.Client[v1.SuspendUserRequest, emptypb.Empty]
+	unsuspendUser          *connect.Client[v1.UnsuspendUserRequest, emptypb.Empty]
+	impersonateUser        *connect.Client[v1.ImpersonateUserRequest, v1.ImpersonateUserResponse]
+	stopImpersonation      *connect.Client[v1.StopImpersonationRequest, v1.StopImpersonationResponse]
+	listActiveSessions     *connect.Client[v1.ListActiveSessionsRequest, v1.ListActiveSessionsResponse]
+	revokeSession          *connect.Client[v1.RevokeSessionRequest, emptypb.Empty]
+	getOrgEntitlements     *connect.Client[v1.GetOrgEntitlementsRequest, v1.GetOrgEntitlementsResponse]
+	overrideEntitlement    *connect.Client[v1.OverrideEntitlementRequest, v1.OverrideEntitlementResponse]
+	grantPlatformRole      *connect.Client[v1.GrantPlatformRoleRequest, emptypb.Empty]
+	revokePlatformRole     *connect.Client[v1.RevokePlatformRoleRequest, emptypb.Empty]
+	listPlatformAdmins     *connect.Client[v1.ListPlatformAdminsRequest, v1.ListPlatformAdminsResponse]
+	listAllOrganizations   *connect.Client[v1.ListAllOrganizationsRequest, v1.ListAllOrganizationsResponse]
+	getOrganizationRoster  *connect.Client[v1.GetOrganizationRosterRequest, v1.GetOrganizationRosterResponse]
+	listFeatureFlags       *connect.Client[v1.ListFeatureFlagsRequest, v1.ListFeatureFlagsResponse]
+	upsertFeatureFlag      *connect.Client[v1.UpsertFeatureFlagRequest, v1.UpsertFeatureFlagResponse]
+	getJobOperations       *connect.Client[v11.GetJobOperationsRequest, v11.GetJobOperationsResponse]
+	listJobs               *connect.Client[v11.ListJobsRequest, v11.ListJobsResponse]
+	getJob                 *connect.Client[v11.GetJobRequest, v11.GetJobResponse]
+	replayJob              *connect.Client[v11.ReplayJobRequest, v11.ReplayJobResponse]
+	getEventOperations     *connect.Client[v12.GetEventOperationsRequest, v12.GetEventOperationsResponse]
+	listEventSubscriptions *connect.Client[v12.ListEventSubscriptionsRequest, v12.ListEventSubscriptionsResponse]
+	listPlatformCatalogue  *connect.Client[v1.ListPlatformCatalogueRequest, v1.ListPlatformCatalogueResponse]
+	getModuleEnvelope      *connect.Client[v1.GetModuleEnvelopeRequest, v1.GetModuleEnvelopeResponse]
+	putModuleEnvelope      *connect.Client[v1.PutModuleEnvelopeRequest, v1.PutModuleEnvelopeResponse]
 }
 
 // SearchUsers calls saas.accounts.v1.PlatformAdminService.SearchUsers.
@@ -275,6 +388,11 @@ func (c *platformAdminServiceClient) UnsuspendUser(ctx context.Context, req *con
 // ImpersonateUser calls saas.accounts.v1.PlatformAdminService.ImpersonateUser.
 func (c *platformAdminServiceClient) ImpersonateUser(ctx context.Context, req *connect.Request[v1.ImpersonateUserRequest]) (*connect.Response[v1.ImpersonateUserResponse], error) {
 	return c.impersonateUser.CallUnary(ctx, req)
+}
+
+// StopImpersonation calls saas.accounts.v1.PlatformAdminService.StopImpersonation.
+func (c *platformAdminServiceClient) StopImpersonation(ctx context.Context, req *connect.Request[v1.StopImpersonationRequest]) (*connect.Response[v1.StopImpersonationResponse], error) {
+	return c.stopImpersonation.CallUnary(ctx, req)
 }
 
 // ListActiveSessions calls saas.accounts.v1.PlatformAdminService.ListActiveSessions.
@@ -312,6 +430,16 @@ func (c *platformAdminServiceClient) ListPlatformAdmins(ctx context.Context, req
 	return c.listPlatformAdmins.CallUnary(ctx, req)
 }
 
+// ListAllOrganizations calls saas.accounts.v1.PlatformAdminService.ListAllOrganizations.
+func (c *platformAdminServiceClient) ListAllOrganizations(ctx context.Context, req *connect.Request[v1.ListAllOrganizationsRequest]) (*connect.Response[v1.ListAllOrganizationsResponse], error) {
+	return c.listAllOrganizations.CallUnary(ctx, req)
+}
+
+// GetOrganizationRoster calls saas.accounts.v1.PlatformAdminService.GetOrganizationRoster.
+func (c *platformAdminServiceClient) GetOrganizationRoster(ctx context.Context, req *connect.Request[v1.GetOrganizationRosterRequest]) (*connect.Response[v1.GetOrganizationRosterResponse], error) {
+	return c.getOrganizationRoster.CallUnary(ctx, req)
+}
+
 // ListFeatureFlags calls saas.accounts.v1.PlatformAdminService.ListFeatureFlags.
 func (c *platformAdminServiceClient) ListFeatureFlags(ctx context.Context, req *connect.Request[v1.ListFeatureFlagsRequest]) (*connect.Response[v1.ListFeatureFlagsResponse], error) {
 	return c.listFeatureFlags.CallUnary(ctx, req)
@@ -344,6 +472,31 @@ func (c *platformAdminServiceClient) ReplayJob(ctx context.Context, req *connect
 	return c.replayJob.CallUnary(ctx, req)
 }
 
+// GetEventOperations calls saas.accounts.v1.PlatformAdminService.GetEventOperations.
+func (c *platformAdminServiceClient) GetEventOperations(ctx context.Context, req *connect.Request[v12.GetEventOperationsRequest]) (*connect.Response[v12.GetEventOperationsResponse], error) {
+	return c.getEventOperations.CallUnary(ctx, req)
+}
+
+// ListEventSubscriptions calls saas.accounts.v1.PlatformAdminService.ListEventSubscriptions.
+func (c *platformAdminServiceClient) ListEventSubscriptions(ctx context.Context, req *connect.Request[v12.ListEventSubscriptionsRequest]) (*connect.Response[v12.ListEventSubscriptionsResponse], error) {
+	return c.listEventSubscriptions.CallUnary(ctx, req)
+}
+
+// ListPlatformCatalogue calls saas.accounts.v1.PlatformAdminService.ListPlatformCatalogue.
+func (c *platformAdminServiceClient) ListPlatformCatalogue(ctx context.Context, req *connect.Request[v1.ListPlatformCatalogueRequest]) (*connect.Response[v1.ListPlatformCatalogueResponse], error) {
+	return c.listPlatformCatalogue.CallUnary(ctx, req)
+}
+
+// GetModuleEnvelope calls saas.accounts.v1.PlatformAdminService.GetModuleEnvelope.
+func (c *platformAdminServiceClient) GetModuleEnvelope(ctx context.Context, req *connect.Request[v1.GetModuleEnvelopeRequest]) (*connect.Response[v1.GetModuleEnvelopeResponse], error) {
+	return c.getModuleEnvelope.CallUnary(ctx, req)
+}
+
+// PutModuleEnvelope calls saas.accounts.v1.PlatformAdminService.PutModuleEnvelope.
+func (c *platformAdminServiceClient) PutModuleEnvelope(ctx context.Context, req *connect.Request[v1.PutModuleEnvelopeRequest]) (*connect.Response[v1.PutModuleEnvelopeResponse], error) {
+	return c.putModuleEnvelope.CallUnary(ctx, req)
+}
+
 // PlatformAdminServiceHandler is an implementation of the saas.accounts.v1.PlatformAdminService
 // service.
 type PlatformAdminServiceHandler interface {
@@ -352,6 +505,15 @@ type PlatformAdminServiceHandler interface {
 	SuspendUser(context.Context, *connect.Request[v1.SuspendUserRequest]) (*connect.Response[emptypb.Empty], error)
 	UnsuspendUser(context.Context, *connect.Request[v1.UnsuspendUserRequest]) (*connect.Response[emptypb.Empty], error)
 	ImpersonateUser(context.Context, *connect.Request[v1.ImpersonateUserRequest]) (*connect.Response[v1.ImpersonateUserResponse], error)
+	// StopImpersonation closes the caller's own impersonation window: it revokes
+	// the session's access tokens and records the end of the window.
+	//
+	// platform_role is deliberately NONE. Platform authority is withheld from an
+	// impersonated request by design, so a support-role gate would make this the
+	// one operation an impersonated session can never reach — and ending the
+	// session is precisely what it must be able to do. Being impersonated is
+	// itself the authorization, checked in the handler.
+	StopImpersonation(context.Context, *connect.Request[v1.StopImpersonationRequest]) (*connect.Response[v1.StopImpersonationResponse], error)
 	// Session visibility
 	ListActiveSessions(context.Context, *connect.Request[v1.ListActiveSessionsRequest]) (*connect.Response[v1.ListActiveSessionsResponse], error)
 	RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[emptypb.Empty], error)
@@ -362,6 +524,12 @@ type PlatformAdminServiceHandler interface {
 	GrantPlatformRole(context.Context, *connect.Request[v1.GrantPlatformRoleRequest]) (*connect.Response[emptypb.Empty], error)
 	RevokePlatformRole(context.Context, *connect.Request[v1.RevokePlatformRoleRequest]) (*connect.Response[emptypb.Empty], error)
 	ListPlatformAdmins(context.Context, *connect.Request[v1.ListPlatformAdminsRequest]) (*connect.Response[v1.ListPlatformAdminsResponse], error)
+	// ListAllOrganizations lists every organization on the platform, whether or
+	// not the caller belongs to it.
+	ListAllOrganizations(context.Context, *connect.Request[v1.ListAllOrganizationsRequest]) (*connect.Response[v1.ListAllOrganizationsResponse], error)
+	// GetOrganizationRoster lists any organization's members for the platform
+	// view, which needs no membership of its own.
+	GetOrganizationRoster(context.Context, *connect.Request[v1.GetOrganizationRosterRequest]) (*connect.Response[v1.GetOrganizationRosterResponse], error)
 	// Legacy feature-flag migration inventory (platform-only, read-only)
 	ListFeatureFlags(context.Context, *connect.Request[v1.ListFeatureFlagsRequest]) (*connect.Response[v1.ListFeatureFlagsResponse], error)
 	// Deprecated: retained for v1 wire compatibility. The legacy inventory is
@@ -375,6 +543,22 @@ type PlatformAdminServiceHandler interface {
 	ListJobs(context.Context, *connect.Request[v11.ListJobsRequest]) (*connect.Response[v11.ListJobsResponse], error)
 	GetJob(context.Context, *connect.Request[v11.GetJobRequest]) (*connect.Response[v11.GetJobResponse], error)
 	ReplayJob(context.Context, *connect.Request[v11.ReplayJobRequest]) (*connect.Response[v11.ReplayJobResponse], error)
+	// Domain-event platform operations (#494 P3). Payload bytes never leave the
+	// durable event boundary through these methods — only counts, timings, and
+	// control-plane subscription metadata do.
+	GetEventOperations(context.Context, *connect.Request[v12.GetEventOperationsRequest]) (*connect.Response[v12.GetEventOperationsResponse], error)
+	ListEventSubscriptions(context.Context, *connect.Request[v12.ListEventSubscriptionsRequest]) (*connect.Response[v12.ListEventSubscriptionsResponse], error)
+	// ListPlatformCatalogue lists every composed module and solution with what
+	// it declares, what runs, and which organizations have it installed.
+	ListPlatformCatalogue(context.Context, *connect.Request[v1.ListPlatformCatalogueRequest]) (*connect.Response[v1.ListPlatformCatalogueResponse], error)
+	// GetModuleEnvelope reads the current module envelope: the authority ceiling
+	// every module principal on this host is derived inside, beside what the
+	// applied module manifests ask for of it.
+	GetModuleEnvelope(context.Context, *connect.Request[v1.GetModuleEnvelopeRequest]) (*connect.Response[v1.GetModuleEnvelopeResponse], error)
+	// PutModuleEnvelope writes the next revision of the module envelope. It takes
+	// effect at the next check with no restart: the module registry is derived
+	// again from it, so a narrowing removes what the new ceiling no longer allows.
+	PutModuleEnvelope(context.Context, *connect.Request[v1.PutModuleEnvelopeRequest]) (*connect.Response[v1.PutModuleEnvelopeResponse], error)
 }
 
 // NewPlatformAdminServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -406,6 +590,12 @@ func NewPlatformAdminServiceHandler(svc PlatformAdminServiceHandler, opts ...con
 		PlatformAdminServiceImpersonateUserProcedure,
 		svc.ImpersonateUser,
 		connect.WithSchema(platformAdminServiceMethods.ByName("ImpersonateUser")),
+		connect.WithHandlerOptions(opts...),
+	)
+	platformAdminServiceStopImpersonationHandler := connect.NewUnaryHandler(
+		PlatformAdminServiceStopImpersonationProcedure,
+		svc.StopImpersonation,
+		connect.WithSchema(platformAdminServiceMethods.ByName("StopImpersonation")),
 		connect.WithHandlerOptions(opts...),
 	)
 	platformAdminServiceListActiveSessionsHandler := connect.NewUnaryHandler(
@@ -450,6 +640,18 @@ func NewPlatformAdminServiceHandler(svc PlatformAdminServiceHandler, opts ...con
 		connect.WithSchema(platformAdminServiceMethods.ByName("ListPlatformAdmins")),
 		connect.WithHandlerOptions(opts...),
 	)
+	platformAdminServiceListAllOrganizationsHandler := connect.NewUnaryHandler(
+		PlatformAdminServiceListAllOrganizationsProcedure,
+		svc.ListAllOrganizations,
+		connect.WithSchema(platformAdminServiceMethods.ByName("ListAllOrganizations")),
+		connect.WithHandlerOptions(opts...),
+	)
+	platformAdminServiceGetOrganizationRosterHandler := connect.NewUnaryHandler(
+		PlatformAdminServiceGetOrganizationRosterProcedure,
+		svc.GetOrganizationRoster,
+		connect.WithSchema(platformAdminServiceMethods.ByName("GetOrganizationRoster")),
+		connect.WithHandlerOptions(opts...),
+	)
 	platformAdminServiceListFeatureFlagsHandler := connect.NewUnaryHandler(
 		PlatformAdminServiceListFeatureFlagsProcedure,
 		svc.ListFeatureFlags,
@@ -486,6 +688,36 @@ func NewPlatformAdminServiceHandler(svc PlatformAdminServiceHandler, opts ...con
 		connect.WithSchema(platformAdminServiceMethods.ByName("ReplayJob")),
 		connect.WithHandlerOptions(opts...),
 	)
+	platformAdminServiceGetEventOperationsHandler := connect.NewUnaryHandler(
+		PlatformAdminServiceGetEventOperationsProcedure,
+		svc.GetEventOperations,
+		connect.WithSchema(platformAdminServiceMethods.ByName("GetEventOperations")),
+		connect.WithHandlerOptions(opts...),
+	)
+	platformAdminServiceListEventSubscriptionsHandler := connect.NewUnaryHandler(
+		PlatformAdminServiceListEventSubscriptionsProcedure,
+		svc.ListEventSubscriptions,
+		connect.WithSchema(platformAdminServiceMethods.ByName("ListEventSubscriptions")),
+		connect.WithHandlerOptions(opts...),
+	)
+	platformAdminServiceListPlatformCatalogueHandler := connect.NewUnaryHandler(
+		PlatformAdminServiceListPlatformCatalogueProcedure,
+		svc.ListPlatformCatalogue,
+		connect.WithSchema(platformAdminServiceMethods.ByName("ListPlatformCatalogue")),
+		connect.WithHandlerOptions(opts...),
+	)
+	platformAdminServiceGetModuleEnvelopeHandler := connect.NewUnaryHandler(
+		PlatformAdminServiceGetModuleEnvelopeProcedure,
+		svc.GetModuleEnvelope,
+		connect.WithSchema(platformAdminServiceMethods.ByName("GetModuleEnvelope")),
+		connect.WithHandlerOptions(opts...),
+	)
+	platformAdminServicePutModuleEnvelopeHandler := connect.NewUnaryHandler(
+		PlatformAdminServicePutModuleEnvelopeProcedure,
+		svc.PutModuleEnvelope,
+		connect.WithSchema(platformAdminServiceMethods.ByName("PutModuleEnvelope")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/saas.accounts.v1.PlatformAdminService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PlatformAdminServiceSearchUsersProcedure:
@@ -496,6 +728,8 @@ func NewPlatformAdminServiceHandler(svc PlatformAdminServiceHandler, opts ...con
 			platformAdminServiceUnsuspendUserHandler.ServeHTTP(w, r)
 		case PlatformAdminServiceImpersonateUserProcedure:
 			platformAdminServiceImpersonateUserHandler.ServeHTTP(w, r)
+		case PlatformAdminServiceStopImpersonationProcedure:
+			platformAdminServiceStopImpersonationHandler.ServeHTTP(w, r)
 		case PlatformAdminServiceListActiveSessionsProcedure:
 			platformAdminServiceListActiveSessionsHandler.ServeHTTP(w, r)
 		case PlatformAdminServiceRevokeSessionProcedure:
@@ -510,6 +744,10 @@ func NewPlatformAdminServiceHandler(svc PlatformAdminServiceHandler, opts ...con
 			platformAdminServiceRevokePlatformRoleHandler.ServeHTTP(w, r)
 		case PlatformAdminServiceListPlatformAdminsProcedure:
 			platformAdminServiceListPlatformAdminsHandler.ServeHTTP(w, r)
+		case PlatformAdminServiceListAllOrganizationsProcedure:
+			platformAdminServiceListAllOrganizationsHandler.ServeHTTP(w, r)
+		case PlatformAdminServiceGetOrganizationRosterProcedure:
+			platformAdminServiceGetOrganizationRosterHandler.ServeHTTP(w, r)
 		case PlatformAdminServiceListFeatureFlagsProcedure:
 			platformAdminServiceListFeatureFlagsHandler.ServeHTTP(w, r)
 		case PlatformAdminServiceUpsertFeatureFlagProcedure:
@@ -522,6 +760,16 @@ func NewPlatformAdminServiceHandler(svc PlatformAdminServiceHandler, opts ...con
 			platformAdminServiceGetJobHandler.ServeHTTP(w, r)
 		case PlatformAdminServiceReplayJobProcedure:
 			platformAdminServiceReplayJobHandler.ServeHTTP(w, r)
+		case PlatformAdminServiceGetEventOperationsProcedure:
+			platformAdminServiceGetEventOperationsHandler.ServeHTTP(w, r)
+		case PlatformAdminServiceListEventSubscriptionsProcedure:
+			platformAdminServiceListEventSubscriptionsHandler.ServeHTTP(w, r)
+		case PlatformAdminServiceListPlatformCatalogueProcedure:
+			platformAdminServiceListPlatformCatalogueHandler.ServeHTTP(w, r)
+		case PlatformAdminServiceGetModuleEnvelopeProcedure:
+			platformAdminServiceGetModuleEnvelopeHandler.ServeHTTP(w, r)
+		case PlatformAdminServicePutModuleEnvelopeProcedure:
+			platformAdminServicePutModuleEnvelopeHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -545,6 +793,10 @@ func (UnimplementedPlatformAdminServiceHandler) UnsuspendUser(context.Context, *
 
 func (UnimplementedPlatformAdminServiceHandler) ImpersonateUser(context.Context, *connect.Request[v1.ImpersonateUserRequest]) (*connect.Response[v1.ImpersonateUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.ImpersonateUser is not implemented"))
+}
+
+func (UnimplementedPlatformAdminServiceHandler) StopImpersonation(context.Context, *connect.Request[v1.StopImpersonationRequest]) (*connect.Response[v1.StopImpersonationResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.StopImpersonation is not implemented"))
 }
 
 func (UnimplementedPlatformAdminServiceHandler) ListActiveSessions(context.Context, *connect.Request[v1.ListActiveSessionsRequest]) (*connect.Response[v1.ListActiveSessionsResponse], error) {
@@ -575,6 +827,14 @@ func (UnimplementedPlatformAdminServiceHandler) ListPlatformAdmins(context.Conte
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.ListPlatformAdmins is not implemented"))
 }
 
+func (UnimplementedPlatformAdminServiceHandler) ListAllOrganizations(context.Context, *connect.Request[v1.ListAllOrganizationsRequest]) (*connect.Response[v1.ListAllOrganizationsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.ListAllOrganizations is not implemented"))
+}
+
+func (UnimplementedPlatformAdminServiceHandler) GetOrganizationRoster(context.Context, *connect.Request[v1.GetOrganizationRosterRequest]) (*connect.Response[v1.GetOrganizationRosterResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.GetOrganizationRoster is not implemented"))
+}
+
 func (UnimplementedPlatformAdminServiceHandler) ListFeatureFlags(context.Context, *connect.Request[v1.ListFeatureFlagsRequest]) (*connect.Response[v1.ListFeatureFlagsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.ListFeatureFlags is not implemented"))
 }
@@ -597,4 +857,24 @@ func (UnimplementedPlatformAdminServiceHandler) GetJob(context.Context, *connect
 
 func (UnimplementedPlatformAdminServiceHandler) ReplayJob(context.Context, *connect.Request[v11.ReplayJobRequest]) (*connect.Response[v11.ReplayJobResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.ReplayJob is not implemented"))
+}
+
+func (UnimplementedPlatformAdminServiceHandler) GetEventOperations(context.Context, *connect.Request[v12.GetEventOperationsRequest]) (*connect.Response[v12.GetEventOperationsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.GetEventOperations is not implemented"))
+}
+
+func (UnimplementedPlatformAdminServiceHandler) ListEventSubscriptions(context.Context, *connect.Request[v12.ListEventSubscriptionsRequest]) (*connect.Response[v12.ListEventSubscriptionsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.ListEventSubscriptions is not implemented"))
+}
+
+func (UnimplementedPlatformAdminServiceHandler) ListPlatformCatalogue(context.Context, *connect.Request[v1.ListPlatformCatalogueRequest]) (*connect.Response[v1.ListPlatformCatalogueResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.ListPlatformCatalogue is not implemented"))
+}
+
+func (UnimplementedPlatformAdminServiceHandler) GetModuleEnvelope(context.Context, *connect.Request[v1.GetModuleEnvelopeRequest]) (*connect.Response[v1.GetModuleEnvelopeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.GetModuleEnvelope is not implemented"))
+}
+
+func (UnimplementedPlatformAdminServiceHandler) PutModuleEnvelope(context.Context, *connect.Request[v1.PutModuleEnvelopeRequest]) (*connect.Response[v1.PutModuleEnvelopeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("saas.accounts.v1.PlatformAdminService.PutModuleEnvelope is not implemented"))
 }

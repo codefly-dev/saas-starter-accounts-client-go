@@ -7,16 +7,17 @@
 package accountsv1
 
 import (
-	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/buf/validate"
-	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/google/api"
+	reflect "reflect"
+	sync "sync"
+	unsafe "unsafe"
+
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/policy/v1"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
 )
 
 const (
@@ -714,16 +715,16 @@ const file_saas_accounts_v1_api_keys_proto_rawDesc = "" +
 	"\x11APIKeyEnvironment\x12#\n" +
 	"\x1fAPI_KEY_ENVIRONMENT_UNSPECIFIED\x10\x00\x12\x1c\n" +
 	"\x18API_KEY_ENVIRONMENT_LIVE\x10\x01\x12\x1c\n" +
-	"\x18API_KEY_ENVIRONMENT_TEST\x10\x022\xf2\x05\n" +
-	"\rAPIKeyService\x12\xd6\x01\n" +
-	"\fCreateAPIKey\x12%.saas.accounts.v1.CreateAPIKeyRequest\x1a&.saas.accounts.v1.CreateAPIKeyResponse\"w\xc2\xf3\x18\\\b\x02\x10\x04\x1a\x0eapi_keys:write\"\x0eapi_keys:write*\x15\n" +
-	"\x0forganization_id\x10\x02\x18\x010\x01:\x13\n" +
-	"\x0fapi_key.created\x10\x02@\x01H\x04P\x03X\x04`\x01\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/api-keys\x12\xbd\x01\n" +
+	"\x18API_KEY_ENVIRONMENT_TEST\x10\x022\xf1\x05\n" +
+	"\rAPIKeyService\x12\xcd\x01\n" +
+	"\fCreateAPIKey\x12%.saas.accounts.v1.CreateAPIKeyRequest\x1a&.saas.accounts.v1.CreateAPIKeyResponse\"n\xc2\xf3\x18S\b\x02\x10\x04\x1a\x0eapi_keys:write*\x15\n" +
+	"\x0forganization_id\x10\x02\x18\x010\x04:\x18\n" +
+	"\x14saas.api_key.created\x10\x02@\x01H\x04P\x03X\x04`\x01x\x02\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/api-keys\x12\xbd\x01\n" +
 	"\vListAPIKeys\x12$.saas.accounts.v1.ListAPIKeysRequest\x1a%.saas.accounts.v1.ListAPIKeysResponse\"a\xc2\xf3\x18I\b\x02\x10\x03\x1a\rapi_keys:read\"\rapi_keys:read*\x15\n" +
-	"\x0forganization_id\x10\x02\x18\x010\x01:\x02\x10\x01@\x01H\x03P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/api-keys\x12\xc8\x01\n" +
-	"\fRevokeAPIKey\x12%.saas.accounts.v1.RevokeAPIKeyRequest\x1a\x16.google.protobuf.Empty\"y\xc2\xf3\x18\\\b\x02\x10\x04\x1a\x0eapi_keys:write\"\x0eapi_keys:write*\x15\n" +
-	"\x0forganization_id\x10\x02\x18\x010\x01:\x13\n" +
-	"\x0fapi_key.revoked\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x13*\x11/v1/api-keys/{id}\x12}\n" +
+	"\x0forganization_id\x10\x02\x18\x010\x01:\x02\x10\x01@\x01H\x03P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/api-keys\x12\xd0\x01\n" +
+	"\fRevokeAPIKey\x12%.saas.accounts.v1.RevokeAPIKeyRequest\x1a\x16.google.protobuf.Empty\"\x80\x01\xc2\xf3\x18c\b\x02\x10\x04\x1a\x0eapi_keys:write\"\x0eapi_keys:write*\x15\n" +
+	"\x0forganization_id\x10\x02\x18\x010\x01:\x18\n" +
+	"\x14saas.api_key.revoked\x10\x02@\x01H\x04P\x03X\x03`\x01x\x02\x82\xd3\xe4\x93\x02\x13*\x11/v1/api-keys/{id}\x12}\n" +
 	"\x0eValidateAPIKey\x12'.saas.accounts.v1.ValidateAPIKeyRequest\x1a(.saas.accounts.v1.ValidateAPIKeyResponse\"\x18\xc2\xf3\x18\x14\b\x03\x10\x010\x01:\x02\x10\x01@\x01H\aP\x04X\x03`\x01B\xdb\x01\n" +
 	"\x14com.saas.accounts.v1B\fApiKeysProtoP\x01ZSgithub.com/codefly-dev/cli/pkg/builder/clients/accounts/saas/accounts/v1;accountsv1\xa2\x02\x03SAX\xaa\x02\x10Saas.Accounts.V1\xca\x02\x10Saas\\Accounts\\V1\xe2\x02\x1cSaas\\Accounts\\V1\\GPBMetadata\xea\x02\x12Saas::Accounts::V1b\x06proto3"
 

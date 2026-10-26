@@ -7,15 +7,16 @@
 package accountsv1
 
 import (
-	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/buf/validate"
-	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/google/api"
-	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/policy/v1"
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
+	_ "github.com/codefly-dev/saas-starter-accounts-client-go/gen/saas/policy/v1"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 const (
@@ -147,94 +148,6 @@ func (x *CreateTeamResponse) GetTeam() *Team {
 	return nil
 }
 
-type ListTeamsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrgId         string                 `protobuf:"bytes,1,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListTeamsRequest) Reset() {
-	*x = ListTeamsRequest{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListTeamsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListTeamsRequest) ProtoMessage() {}
-
-func (x *ListTeamsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListTeamsRequest.ProtoReflect.Descriptor instead.
-func (*ListTeamsRequest) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *ListTeamsRequest) GetOrgId() string {
-	if x != nil {
-		return x.OrgId
-	}
-	return ""
-}
-
-type ListTeamsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Teams         []*Team                `protobuf:"bytes,1,rep,name=teams,proto3" json:"teams,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListTeamsResponse) Reset() {
-	*x = ListTeamsResponse{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListTeamsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListTeamsResponse) ProtoMessage() {}
-
-func (x *ListTeamsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListTeamsResponse.ProtoReflect.Descriptor instead.
-func (*ListTeamsResponse) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ListTeamsResponse) GetTeams() []*Team {
-	if x != nil {
-		return x.Teams
-	}
-	return nil
-}
-
 type AddTeamMemberRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TeamId        string                 `protobuf:"bytes,1,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
@@ -246,7 +159,7 @@ type AddTeamMemberRequest struct {
 
 func (x *AddTeamMemberRequest) Reset() {
 	*x = AddTeamMemberRequest{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[4]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -258,7 +171,7 @@ func (x *AddTeamMemberRequest) String() string {
 func (*AddTeamMemberRequest) ProtoMessage() {}
 
 func (x *AddTeamMemberRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[4]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +184,7 @@ func (x *AddTeamMemberRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddTeamMemberRequest.ProtoReflect.Descriptor instead.
 func (*AddTeamMemberRequest) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{4}
+	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *AddTeamMemberRequest) GetTeamId() string {
@@ -305,7 +218,7 @@ type RemoveTeamMemberRequest struct {
 
 func (x *RemoveTeamMemberRequest) Reset() {
 	*x = RemoveTeamMemberRequest{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[5]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -317,7 +230,7 @@ func (x *RemoveTeamMemberRequest) String() string {
 func (*RemoveTeamMemberRequest) ProtoMessage() {}
 
 func (x *RemoveTeamMemberRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[5]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -330,7 +243,7 @@ func (x *RemoveTeamMemberRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveTeamMemberRequest.ProtoReflect.Descriptor instead.
 func (*RemoveTeamMemberRequest) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{5}
+	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RemoveTeamMemberRequest) GetTeamId() string {
@@ -358,7 +271,7 @@ type UpdateTeamRequest struct {
 
 func (x *UpdateTeamRequest) Reset() {
 	*x = UpdateTeamRequest{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[6]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -370,7 +283,7 @@ func (x *UpdateTeamRequest) String() string {
 func (*UpdateTeamRequest) ProtoMessage() {}
 
 func (x *UpdateTeamRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[6]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -383,7 +296,7 @@ func (x *UpdateTeamRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTeamRequest.ProtoReflect.Descriptor instead.
 func (*UpdateTeamRequest) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{6}
+	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UpdateTeamRequest) GetTeamId() string {
@@ -416,7 +329,7 @@ type UpdateTeamResponse struct {
 
 func (x *UpdateTeamResponse) Reset() {
 	*x = UpdateTeamResponse{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[7]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -428,7 +341,7 @@ func (x *UpdateTeamResponse) String() string {
 func (*UpdateTeamResponse) ProtoMessage() {}
 
 func (x *UpdateTeamResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[7]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -441,7 +354,7 @@ func (x *UpdateTeamResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTeamResponse.ProtoReflect.Descriptor instead.
 func (*UpdateTeamResponse) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{7}
+	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateTeamResponse) GetTeam() *Team {
@@ -460,7 +373,7 @@ type DeleteTeamRequest struct {
 
 func (x *DeleteTeamRequest) Reset() {
 	*x = DeleteTeamRequest{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[8]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -472,7 +385,7 @@ func (x *DeleteTeamRequest) String() string {
 func (*DeleteTeamRequest) ProtoMessage() {}
 
 func (x *DeleteTeamRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[8]
+	mi := &file_saas_accounts_v1_teams_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -485,7 +398,7 @@ func (x *DeleteTeamRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTeamRequest.ProtoReflect.Descriptor instead.
 func (*DeleteTeamRequest) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{8}
+	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DeleteTeamRequest) GetTeamId() string {
@@ -495,99 +408,11 @@ func (x *DeleteTeamRequest) GetTeamId() string {
 	return ""
 }
 
-type ListTeamMembersRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TeamId        string                 `protobuf:"bytes,1,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListTeamMembersRequest) Reset() {
-	*x = ListTeamMembersRequest{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListTeamMembersRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListTeamMembersRequest) ProtoMessage() {}
-
-func (x *ListTeamMembersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListTeamMembersRequest.ProtoReflect.Descriptor instead.
-func (*ListTeamMembersRequest) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *ListTeamMembersRequest) GetTeamId() string {
-	if x != nil {
-		return x.TeamId
-	}
-	return ""
-}
-
-type ListTeamMembersResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Members       []*TeamMembership      `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListTeamMembersResponse) Reset() {
-	*x = ListTeamMembersResponse{}
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListTeamMembersResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListTeamMembersResponse) ProtoMessage() {}
-
-func (x *ListTeamMembersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_saas_accounts_v1_teams_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListTeamMembersResponse.ProtoReflect.Descriptor instead.
-func (*ListTeamMembersResponse) Descriptor() ([]byte, []int) {
-	return file_saas_accounts_v1_teams_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *ListTeamMembersResponse) GetMembers() []*TeamMembership {
-	if x != nil {
-		return x.Members
-	}
-	return nil
-}
-
 var File_saas_accounts_v1_teams_proto protoreflect.FileDescriptor
 
 const file_saas_accounts_v1_teams_proto_rawDesc = "" +
 	"\n" +
-	"\x1csaas/accounts/v1/teams.proto\x12\x10saas.accounts.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1dsaas/accounts/v1/common.proto\x1a\x1csaas/policy/v1/options.proto\"\xad\x01\n" +
+	"\x1csaas/accounts/v1/teams.proto\x12\x10saas.accounts.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1dsaas/accounts/v1/common.proto\x1a saas/accounts/v1/directory.proto\x1a\x1csaas/policy/v1/options.proto\"\xad\x01\n" +
 	"\x11CreateTeamRequest\x12\x1f\n" +
 	"\x06org_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x05orgId\x12\x1b\n" +
 	"\x04name\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12 \n" +
@@ -595,11 +420,7 @@ const file_saas_accounts_v1_teams_proto_rawDesc = "" +
 	"\x0eparent_team_id\x18\x04 \x01(\tR\fparentTeamId\x12\x12\n" +
 	"\x04slug\x18\x05 \x01(\tR\x04slug\"@\n" +
 	"\x12CreateTeamResponse\x12*\n" +
-	"\x04team\x18\x01 \x01(\v2\x16.saas.accounts.v1.TeamR\x04team\"3\n" +
-	"\x10ListTeamsRequest\x12\x1f\n" +
-	"\x06org_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x05orgId\"A\n" +
-	"\x11ListTeamsResponse\x12,\n" +
-	"\x05teams\x18\x01 \x03(\v2\x16.saas.accounts.v1.TeamR\x05teams\"\x8c\x01\n" +
+	"\x04team\x18\x01 \x01(\v2\x16.saas.accounts.v1.TeamR\x04team\"\x8c\x01\n" +
 	"\x14AddTeamMemberRequest\x12!\n" +
 	"\ateam_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\x12!\n" +
 	"\auser_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\x12.\n" +
@@ -614,34 +435,30 @@ const file_saas_accounts_v1_teams_proto_rawDesc = "" +
 	"\x12UpdateTeamResponse\x12*\n" +
 	"\x04team\x18\x01 \x01(\v2\x16.saas.accounts.v1.TeamR\x04team\"6\n" +
 	"\x11DeleteTeamRequest\x12!\n" +
-	"\ateam_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\";\n" +
-	"\x16ListTeamMembersRequest\x12!\n" +
-	"\ateam_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\"U\n" +
-	"\x17ListTeamMembersResponse\x12:\n" +
-	"\amembers\x18\x01 \x03(\v2 .saas.accounts.v1.TeamMembershipR\amembers2\xdc\t\n" +
-	"\vTeamService\x12\xb8\x01\n" +
+	"\ateam_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId2\xfb\t\n" +
+	"\vTeamService\x12\xbd\x01\n" +
 	"\n" +
-	"CreateTeam\x12#.saas.accounts.v1.CreateTeamRequest\x1a$.saas.accounts.v1.CreateTeamResponse\"_\xc2\xf3\x180\b\x02\x10\x04*\f\n" +
-	"\x06org_id\x10\x02\x18\x010\x01:\x10\n" +
-	"\fteam.created\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02%:\x01*\" /v1/organizations/{org_id}/teams\x12\xa4\x01\n" +
+	"CreateTeam\x12#.saas.accounts.v1.CreateTeamRequest\x1a$.saas.accounts.v1.CreateTeamResponse\"d\xc2\xf3\x185\b\x02\x10\x04*\f\n" +
+	"\x06org_id\x10\x02\x18\x010\x01:\x15\n" +
+	"\x11saas.team.created\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02%:\x01*\" /v1/organizations/{org_id}/teams\x12\xa4\x01\n" +
 	"\tListTeams\x12\".saas.accounts.v1.ListTeamsRequest\x1a#.saas.accounts.v1.ListTeamsResponse\"N\xc2\xf3\x18\"\b\x02\x10\x03*\f\n" +
-	"\x06org_id\x10\x02\x18\x010\x01:\x02\x10\x01@\x01H\x03P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\"\x12 /v1/organizations/{org_id}/teams\x12\xad\x01\n" +
-	"\tAddMember\x12&.saas.accounts.v1.AddTeamMemberRequest\x1a\x16.google.protobuf.Empty\"`\xc2\xf3\x186\b\x02\x10\x04*\r\n" +
-	"\ateam_id\x10\x03\x18\x020\x01:\x15\n" +
-	"\x11team.member_added\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/teams/{team_id}/members\x12\xbc\x01\n" +
-	"\fRemoveMember\x12).saas.accounts.v1.RemoveTeamMemberRequest\x1a\x16.google.protobuf.Empty\"i\xc2\xf3\x188\b\x02\x10\x04*\r\n" +
-	"\ateam_id\x10\x03\x18\x020\x01:\x17\n" +
-	"\x13team.member_removed\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02'*%/v1/teams/{team_id}/members/{user_id}\x12\xae\x01\n" +
+	"\x06org_id\x10\x02\x18\x010\x01:\x02\x10\x01@\x01H\x03P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\"\x12 /v1/organizations/{org_id}/teams\x12\xb4\x01\n" +
+	"\tAddMember\x12&.saas.accounts.v1.AddTeamMemberRequest\x1a\x16.google.protobuf.Empty\"g\xc2\xf3\x18=\b\x02\x10\x04*\r\n" +
+	"\ateam_id\x10\x03\x18\x020\x01:\x1a\n" +
+	"\x16saas.team.member_added\x10\x02@\x01H\x04P\x03X\x03`\x01x\x02\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/teams/{team_id}/members\x12\xc3\x01\n" +
+	"\fRemoveMember\x12).saas.accounts.v1.RemoveTeamMemberRequest\x1a\x16.google.protobuf.Empty\"p\xc2\xf3\x18?\b\x02\x10\x04*\r\n" +
+	"\ateam_id\x10\x03\x18\x020\x01:\x1c\n" +
+	"\x18saas.team.member_removed\x10\x02@\x01H\x04P\x03X\x03`\x01x\x02\x82\xd3\xe4\x93\x02'*%/v1/teams/{team_id}/members/{user_id}\x12\xae\x01\n" +
 	"\vListMembers\x12(.saas.accounts.v1.ListTeamMembersRequest\x1a).saas.accounts.v1.ListTeamMembersResponse\"J\xc2\xf3\x18#\b\x02\x10\x03*\r\n" +
-	"\ateam_id\x10\x03\x18\x020\x01:\x02\x10\x01@\x01H\x03P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/teams/{team_id}/members\x12\xac\x01\n" +
+	"\ateam_id\x10\x03\x18\x020\x01:\x02\x10\x01@\x01H\x03P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/teams/{team_id}/members\x12\xb1\x01\n" +
 	"\n" +
-	"UpdateTeam\x12#.saas.accounts.v1.UpdateTeamRequest\x1a$.saas.accounts.v1.UpdateTeamResponse\"S\xc2\xf3\x181\b\x02\x10\x04*\r\n" +
-	"\ateam_id\x10\x03\x18\x020\x01:\x10\n" +
-	"\fteam.updated\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x18:\x01*2\x13/v1/teams/{team_id}\x12\x9b\x01\n" +
+	"UpdateTeam\x12#.saas.accounts.v1.UpdateTeamRequest\x1a$.saas.accounts.v1.UpdateTeamResponse\"X\xc2\xf3\x186\b\x02\x10\x04*\r\n" +
+	"\ateam_id\x10\x03\x18\x020\x01:\x15\n" +
+	"\x11saas.team.updated\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x18:\x01*2\x13/v1/teams/{team_id}\x12\xa2\x01\n" +
 	"\n" +
-	"DeleteTeam\x12#.saas.accounts.v1.DeleteTeamRequest\x1a\x16.google.protobuf.Empty\"P\xc2\xf3\x181\b\x02\x10\x04*\r\n" +
-	"\ateam_id\x10\x03\x18\x020\x01:\x10\n" +
-	"\fteam.deleted\x10\x02@\x01H\x04P\x03X\x03`\x01\x82\xd3\xe4\x93\x02\x15*\x13/v1/teams/{team_id}B\xd9\x01\n" +
+	"DeleteTeam\x12#.saas.accounts.v1.DeleteTeamRequest\x1a\x16.google.protobuf.Empty\"W\xc2\xf3\x188\b\x02\x10\x04*\r\n" +
+	"\ateam_id\x10\x03\x18\x020\x01:\x15\n" +
+	"\x11saas.team.deleted\x10\x02@\x01H\x04P\x03X\x03`\x01x\x02\x82\xd3\xe4\x93\x02\x15*\x13/v1/teams/{team_id}B\xd9\x01\n" +
 	"\x14com.saas.accounts.v1B\n" +
 	"TeamsProtoP\x01ZSgithub.com/codefly-dev/cli/pkg/builder/clients/accounts/saas/accounts/v1;accountsv1\xa2\x02\x03SAX\xaa\x02\x10Saas.Accounts.V1\xca\x02\x10Saas\\Accounts\\V1\xe2\x02\x1cSaas\\Accounts\\V1\\GPBMetadata\xea\x02\x12Saas::Accounts::V1b\x06proto3"
 
@@ -657,49 +474,46 @@ func file_saas_accounts_v1_teams_proto_rawDescGZIP() []byte {
 	return file_saas_accounts_v1_teams_proto_rawDescData
 }
 
-var file_saas_accounts_v1_teams_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_saas_accounts_v1_teams_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_saas_accounts_v1_teams_proto_goTypes = []any{
 	(*CreateTeamRequest)(nil),       // 0: saas.accounts.v1.CreateTeamRequest
 	(*CreateTeamResponse)(nil),      // 1: saas.accounts.v1.CreateTeamResponse
-	(*ListTeamsRequest)(nil),        // 2: saas.accounts.v1.ListTeamsRequest
-	(*ListTeamsResponse)(nil),       // 3: saas.accounts.v1.ListTeamsResponse
-	(*AddTeamMemberRequest)(nil),    // 4: saas.accounts.v1.AddTeamMemberRequest
-	(*RemoveTeamMemberRequest)(nil), // 5: saas.accounts.v1.RemoveTeamMemberRequest
-	(*UpdateTeamRequest)(nil),       // 6: saas.accounts.v1.UpdateTeamRequest
-	(*UpdateTeamResponse)(nil),      // 7: saas.accounts.v1.UpdateTeamResponse
-	(*DeleteTeamRequest)(nil),       // 8: saas.accounts.v1.DeleteTeamRequest
-	(*ListTeamMembersRequest)(nil),  // 9: saas.accounts.v1.ListTeamMembersRequest
-	(*ListTeamMembersResponse)(nil), // 10: saas.accounts.v1.ListTeamMembersResponse
-	(*Team)(nil),                    // 11: saas.accounts.v1.Team
-	(TeamRole)(0),                   // 12: saas.accounts.v1.TeamRole
-	(*TeamMembership)(nil),          // 13: saas.accounts.v1.TeamMembership
-	(*emptypb.Empty)(nil),           // 14: google.protobuf.Empty
+	(*AddTeamMemberRequest)(nil),    // 2: saas.accounts.v1.AddTeamMemberRequest
+	(*RemoveTeamMemberRequest)(nil), // 3: saas.accounts.v1.RemoveTeamMemberRequest
+	(*UpdateTeamRequest)(nil),       // 4: saas.accounts.v1.UpdateTeamRequest
+	(*UpdateTeamResponse)(nil),      // 5: saas.accounts.v1.UpdateTeamResponse
+	(*DeleteTeamRequest)(nil),       // 6: saas.accounts.v1.DeleteTeamRequest
+	(*Team)(nil),                    // 7: saas.accounts.v1.Team
+	(TeamRole)(0),                   // 8: saas.accounts.v1.TeamRole
+	(*ListTeamsRequest)(nil),        // 9: saas.accounts.v1.ListTeamsRequest
+	(*ListTeamMembersRequest)(nil),  // 10: saas.accounts.v1.ListTeamMembersRequest
+	(*ListTeamsResponse)(nil),       // 11: saas.accounts.v1.ListTeamsResponse
+	(*emptypb.Empty)(nil),           // 12: google.protobuf.Empty
+	(*ListTeamMembersResponse)(nil), // 13: saas.accounts.v1.ListTeamMembersResponse
 }
 var file_saas_accounts_v1_teams_proto_depIdxs = []int32{
-	11, // 0: saas.accounts.v1.CreateTeamResponse.team:type_name -> saas.accounts.v1.Team
-	11, // 1: saas.accounts.v1.ListTeamsResponse.teams:type_name -> saas.accounts.v1.Team
-	12, // 2: saas.accounts.v1.AddTeamMemberRequest.role:type_name -> saas.accounts.v1.TeamRole
-	11, // 3: saas.accounts.v1.UpdateTeamResponse.team:type_name -> saas.accounts.v1.Team
-	13, // 4: saas.accounts.v1.ListTeamMembersResponse.members:type_name -> saas.accounts.v1.TeamMembership
-	0,  // 5: saas.accounts.v1.TeamService.CreateTeam:input_type -> saas.accounts.v1.CreateTeamRequest
-	2,  // 6: saas.accounts.v1.TeamService.ListTeams:input_type -> saas.accounts.v1.ListTeamsRequest
-	4,  // 7: saas.accounts.v1.TeamService.AddMember:input_type -> saas.accounts.v1.AddTeamMemberRequest
-	5,  // 8: saas.accounts.v1.TeamService.RemoveMember:input_type -> saas.accounts.v1.RemoveTeamMemberRequest
-	9,  // 9: saas.accounts.v1.TeamService.ListMembers:input_type -> saas.accounts.v1.ListTeamMembersRequest
-	6,  // 10: saas.accounts.v1.TeamService.UpdateTeam:input_type -> saas.accounts.v1.UpdateTeamRequest
-	8,  // 11: saas.accounts.v1.TeamService.DeleteTeam:input_type -> saas.accounts.v1.DeleteTeamRequest
-	1,  // 12: saas.accounts.v1.TeamService.CreateTeam:output_type -> saas.accounts.v1.CreateTeamResponse
-	3,  // 13: saas.accounts.v1.TeamService.ListTeams:output_type -> saas.accounts.v1.ListTeamsResponse
-	14, // 14: saas.accounts.v1.TeamService.AddMember:output_type -> google.protobuf.Empty
-	14, // 15: saas.accounts.v1.TeamService.RemoveMember:output_type -> google.protobuf.Empty
-	10, // 16: saas.accounts.v1.TeamService.ListMembers:output_type -> saas.accounts.v1.ListTeamMembersResponse
-	7,  // 17: saas.accounts.v1.TeamService.UpdateTeam:output_type -> saas.accounts.v1.UpdateTeamResponse
-	14, // 18: saas.accounts.v1.TeamService.DeleteTeam:output_type -> google.protobuf.Empty
-	12, // [12:19] is the sub-list for method output_type
-	5,  // [5:12] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	7,  // 0: saas.accounts.v1.CreateTeamResponse.team:type_name -> saas.accounts.v1.Team
+	8,  // 1: saas.accounts.v1.AddTeamMemberRequest.role:type_name -> saas.accounts.v1.TeamRole
+	7,  // 2: saas.accounts.v1.UpdateTeamResponse.team:type_name -> saas.accounts.v1.Team
+	0,  // 3: saas.accounts.v1.TeamService.CreateTeam:input_type -> saas.accounts.v1.CreateTeamRequest
+	9,  // 4: saas.accounts.v1.TeamService.ListTeams:input_type -> saas.accounts.v1.ListTeamsRequest
+	2,  // 5: saas.accounts.v1.TeamService.AddMember:input_type -> saas.accounts.v1.AddTeamMemberRequest
+	3,  // 6: saas.accounts.v1.TeamService.RemoveMember:input_type -> saas.accounts.v1.RemoveTeamMemberRequest
+	10, // 7: saas.accounts.v1.TeamService.ListMembers:input_type -> saas.accounts.v1.ListTeamMembersRequest
+	4,  // 8: saas.accounts.v1.TeamService.UpdateTeam:input_type -> saas.accounts.v1.UpdateTeamRequest
+	6,  // 9: saas.accounts.v1.TeamService.DeleteTeam:input_type -> saas.accounts.v1.DeleteTeamRequest
+	1,  // 10: saas.accounts.v1.TeamService.CreateTeam:output_type -> saas.accounts.v1.CreateTeamResponse
+	11, // 11: saas.accounts.v1.TeamService.ListTeams:output_type -> saas.accounts.v1.ListTeamsResponse
+	12, // 12: saas.accounts.v1.TeamService.AddMember:output_type -> google.protobuf.Empty
+	12, // 13: saas.accounts.v1.TeamService.RemoveMember:output_type -> google.protobuf.Empty
+	13, // 14: saas.accounts.v1.TeamService.ListMembers:output_type -> saas.accounts.v1.ListTeamMembersResponse
+	5,  // 15: saas.accounts.v1.TeamService.UpdateTeam:output_type -> saas.accounts.v1.UpdateTeamResponse
+	12, // 16: saas.accounts.v1.TeamService.DeleteTeam:output_type -> google.protobuf.Empty
+	10, // [10:17] is the sub-list for method output_type
+	3,  // [3:10] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_saas_accounts_v1_teams_proto_init() }
@@ -708,13 +522,14 @@ func file_saas_accounts_v1_teams_proto_init() {
 		return
 	}
 	file_saas_accounts_v1_common_proto_init()
+	file_saas_accounts_v1_directory_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_saas_accounts_v1_teams_proto_rawDesc), len(file_saas_accounts_v1_teams_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

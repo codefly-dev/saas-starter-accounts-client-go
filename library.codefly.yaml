@@ -1,6 +1,6 @@
 kind: library
 name: saas-starter-accounts-client
-version: 0.1.0
+version: 0.2.0
 languages:
     - name: go
       path: go/
@@ -8,20 +8,24 @@ languages:
         - github.com/codefly-dev/saas-starter-accounts-client-go
 sources:
     - package: codefly/saas-starter
-      version: 0.1.0
+      version: 0.2.0
       module: saas-starter
       service: accounts
       endpoint: connect
-      contract-digest: sha256:e6202131a07b3905490af44fa5e5194660c4a6eaaa19c0ec14a110cc3690cb51
+      contract-digest: sha256:e8b577955a9bc1cdd7924063718b82563794917421ad4a83aecfff9629e500c6
       services:
         - APIKeyService
+        - AccessibleScopeService
+        - ApprovalReviewService
         - AuditService
         - AuthService
         - BillingService
+        - ClientRegistryService
         - ConsentService
         - DashboardService
         - DatasourceService
         - DelegationService
+        - DirectoryService
         - GDPRService
         - IdentityService
         - InstallationService
@@ -35,7 +39,10 @@ sources:
         - PermissionService
         - PlatformAdminService
         - PrincipalService
+        - ResourceFollowService
         - SSOAdminService
+        - SolutionEntitlementService
+        - SolutionRegistryService
         - TeamService
         - UsageService
         - UserService
@@ -43,7 +50,8 @@ sources:
         - WaitlistService
         - WebhookService
         - WorkContextService
+      as: accounts
 generated-by:
-    codefly: development
-    companion: ghcr.io/codefly-dev/proto:0.0.13
+    codefly: development-e38ed141
+    companion: ghcr.io/codefly-dev/proto:0.0.18
     facade: true
